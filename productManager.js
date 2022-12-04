@@ -1,6 +1,5 @@
 class ProductManager {
-    constructor(gestor) {
-        this.gestor = gestor;
+    constructor() {
         this.products = [];
     }
 
@@ -20,8 +19,20 @@ class ProductManager {
             thumbnail,
             code,
             stock,
-        }
-        this.products.push(product);
+        };
+        if (
+            title === undefined ||
+            description === undefined ||
+            price === undefined ||
+            thumbnail === undefined ||
+            code === undefined ||
+            stock === undefined 
+        ) { return console.log("all fields are required");}
+
+
+
+        let validation = this.products.find((product) => product.code === code);
+        (validation) ? console.log("Product already exists") : this.products.push(product)
     }
 
     getProduct() {
@@ -29,17 +40,17 @@ class ProductManager {
     }
 
     getProductById(id) {
-        const prod = this.products.find((prod) => prod.id === id);
-        if (prod === id) {
-            console.log("Not Found");
-        }
-        else{
-            this.products.push(prod)
+        let prod = this.products.find((product) => product.id === id);
+        if (prod){
+            return prod;
+        } else{
+            return console.log("not found");
         }
     }
 }
 
 const productManager = new ProductManager();
-productManager.addProduct("macbook pro", "notebook gama alta", 200, "no disponible", "123dasd", 2);
-productManager.addProduct("amd ryzen 5 5600x", "procesador gama media", 233, "no disponible", "123dasd", 2);
-console.log(productManager.getProductById());
+productManager.addProduct("macbook pro", "notebook gama alta", 200, "no disponible", "123abc", 2);
+productManager.addProduct("amd ryzen 5 5600x", "procesador gama media", 230, "no disponible", "123abcd", 2);
+productManager.addProduct("intel i5 6500", "procesador gama media", 230, "no disponible", "abc1235", 10)
+console.log("product search",productManager.getProductById(2));
