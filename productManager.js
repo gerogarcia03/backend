@@ -35,7 +35,7 @@ class ProductManager {
         (validation) ? console.log("Product already exists") : this.products.push(product)
     }
 
-    getProduct() {
+    getProducts() {
         return this.products;
     }
 
@@ -53,4 +53,4 @@ const productManager = new ProductManager();
 productManager.addProduct("macbook pro", "notebook gama alta", 200, "no disponible", "123abc", 2);
 productManager.addProduct("amd ryzen 5 5600x", "procesador gama media", 230, "no disponible", "123abcd", 2);
 productManager.addProduct("intel i5 6500", "procesador gama media", 230, "no disponible", "abc1235", 10)
-console.log("product search",productManager.getProductById(2));
+console.log("product search",productManager.getProducts());
