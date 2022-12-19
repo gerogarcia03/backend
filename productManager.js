@@ -1,33 +1,121 @@
-const { rejects } = require('assert');
 const fs = require('fs');
 const path = require('path')
 
 class ProductManager {
-    constructor() {
+    constructor(path, products) {
+        this.path = path
         this.products = [];
-        this.path = path.join(__dirname, "products.json") 
     }
 
-    addProduct( prod ) {
-        return new Promise((resolve, rejects))
+    addProduct(product) {
+        return new Promise((resolve, reject) => {
+            fs.readFile(this.path, 'utf-8', (err, data) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    if (data) {
+                        this.products = JSON.parser(data);
+                    }
+                    product.id = this.products.length
+                        ? this.products.reduce(
+                            (max, product) => (product.id > max ? product.id : max),
+                            0
+                        ) + 1
+                        : 1;
+                    this.products.push(product);
+                    fs.writeFyle(
+                        this.path,
+                        JSON.stringify(this.products, nulll, '/t'),
+                        (err) => {
+                            if (err) {
+                                reject(err);
+                            } else {
+                                resolve()
+                            }
+                        }
+                    )
+                }
+            })
+        })
     }
 
     getProducts() {
-        return this.products;
+        return new Promise((resolve, reject) => {
+            fs.readFile(this.path, 'utf-8', (err, data) => {
+                if (err) {
+                    reject(err)
+                } else {
+                    this.products = JSON.parse(data);
+                    resolve(this.products);
+                }
+            })
+        })
     }
 
     getProductsById(id) {
-        const prod = this.products.find((product) => product.id === id);
-        if (prod) {
-            return prod;
-        } else {
-            console.error("not found");
-        }
+        return new Promise((resolve, reject) => {
+            fs.readFile(this.path, 'utf-8', (err, data) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    this.products = JSON.parse(data);
+                    const product = this.products.findIndex((product) => product.id === id);
+                    resolve(product);
+                }
+            })
+        })
+    }
+
+    updateProduct(id, product) {
+        return new Promise((resolve, reject) => {
+            fs.readFile(this.path, 'utf-8', (err, data) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    this.products = JSON.parse(data);
+                    const index = this.products.findIndex((product) => product.id === id);
+                    this.products[index] = product;
+                    fs.writeFile(
+                        this.path,
+                        JSON.stringify(this.products, null, '/t'),
+                        (err) => {
+                            if (err) {
+                                reject(err);
+                            } else {
+                                resolve();
+                            }
+                        }
+                    )
+                }
+            })
+        })
+    }
+
+    deleteProduct(id) {
+        return new Promise((resolve, reject) => {
+            fs.readFile(this.path, 'utf-8', (err, data) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    this.products = JSON.parse(data);
+                    const index = this.products.findIndex((product) => product.id === id);
+                    this.products.splice(index, 1);
+
+                    fs.writeFile(
+                        this.path,
+                        JSON.stringify(this.products, null, '/t'),
+                        (err) => {
+                            if (err) {
+                                reject(err) 
+                            } else {
+                                resolve()
+                            }
+                        }
+                    )
+                }
+            })
+        })
     }
 }
 
-const productManager = new ProductManager();
-productManager.addProduct("macbook pro", "notebook gama alta", 200, "no disponible", "123abc", 2);
-productManager.addProduct("amd ryzen 5 5600x", "procesador gama media", 230, "no disponible", "123abcd", 2);
-productManager.addProduct("intel i5 6500", "procesador gama media", 230, "no disponible", "abc1235", 10)
-console.log("product search", productManager.getProductsById());
+module.exports = ProductManager
