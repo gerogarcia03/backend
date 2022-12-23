@@ -1,0 +1,26 @@
+{
+  "name": "backend-1",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon index.js",
+    "startnode": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gerogarcia03/backend.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/gerogarcia03/backend/issues"
+  },
+  "homepage": "https://github.com/gerogarcia03/backend#readme",
+  "dependencies": {
+    "node": "^19.2.0",
+    "nodemon": "^2.0.20"
+  },
+  "keywords": [],
+  "description": ""
+}
