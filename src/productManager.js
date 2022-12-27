@@ -1,109 +1,115 @@
-const fs = require('fs');
-const path = require('path')
+import fs from 'fs';
+import path from 'path';
 
 class ProductManager {
     constructor(path, products) {
         this.path = path
-        this.products = [];
     }
 
-    addProduct(product) {
-        return new Promise((resolve, reject) => {
-            fs.readFile(this.path, 'utf-8', (err, data) => {
-                if (err) {
-                    reject(err);
-                } else {
-                    if (data) {
-                        this.products = JSON.parse(data);
-                    }
-                    product.id = this.products.length
-                        ? this.products.reduce(
-                            (max, product) => (product.id > max ? product.id : max),
-                            0
-                        ) + 1
-                        : 1;
-                    this.products.push(product);
-                    fs.writeFile(
-                        this.path,
-                        JSON.stringify(this.products, null, '\t'),
-                        (err) => {
-                            if (err) {
-                                reject(err);
-                            } else {
-                                resolve()
-                            }
-                        }
-                    )
-                }
-            })
-        })
+    async addProduct(product) {
+        try {
+
+            const data = await this.readFile();
+            if (data) {
+                this.products = JSON.parse(data);
+            }
+
+            if (product.id = this.products.length) {
+                this.products.reduce((max, product) => (product.id > max ? product.id : max),
+                    0
+                ) + 1
+            } else {
+                1;
+            }
+
+            this.products.push(product);
+
+            await this.writeFile(this.products)
+        } catch (err) {
+            throw err;
+        }
+    };
+
+
+
+    async getProducts() {
+        try {
+            const data = await this.readFile();
+
+            this.products = JSON.parse(data);
+            return this.products;
+        } catch (err) {
+            throw err;
+        }
+    };
+
+
+
+    async getProductsById(id) {
+        try {
+            const data = await this.readFile();
+
+            this.products = JSON.parse(data);
+            const index = this.products.findIndex((product) => product.id === id);
+            this.products.splice(index, 1);
+            await this.writeFile(this.products);
+        } catch (err) {
+            throw err
+        }
     }
 
-    getProducts() {
-        return new Promise((resolve, reject) => {
-            fs.readFile(this.path, 'utf-8', (err, data) => {
-                if (err) {
-                    reject(err)
-                } else {
-                    this.products = JSON.parse(data);
-                    resolve(this.products);
-                }
-            })
-        })
-    }
 
-    getProductsById(id) {
-        return new Promise((resolve, reject) => {
-            fs.readFile(this.path, 'utf-8', (err, data) => {
-                if (err) {
-                    reject(err);
-                } else {
-                    this.products = JSON.parse(data);
-                    const product = this.products.find((product) => product.id === id);
-                    resolve(product);
-                }
-            })
-        })
-    }
+    async updateProduct(id, product) {
+        try {
+            const data = await this.readFile();
 
-    updateProduct(id, product) {
-        return new Promise((resolve, reject) => {
-            fs.readFile(this.path, 'utf-8', (err, data) => {
-                if (err) {
-                    reject(err);
-                } else {
-                    this.products = JSON.parse(data);
-                    const index = this.products.findIndex((product) => product.id === id);
-                    product.id = id;
-                    this.products[index] = product;
-                    fs.writeFile(
-                        this.path,
-                        JSON.stringify(this.products, null, '\t'),
-                        (err) => {
-                            if (err) {
-                                reject(err);
-                            } else {
-                                resolve();
-                            }
-                        }
-                    )
-                }
-            })
-        })
-    }
+            this.products = JSON.parse(data);
+            const index = this.products.findIndex((product) => product.id === id);
+            this.products[index] = product;
+            await this.writeFile(this.products);
+        } catch (err) {
+            throw err
+        }
+    };
+
 
     async deleteProduct(id) {
-        let data = await this.getProducts();
-        let Delete = data.filter(product => product.id != id);
-        if (Delete) {
-            await fs.promises.writeFile('products.json', JSON.stringify(Delete, null, 2))
-        } else {
-            console.log("Elemento no encontrado");
+        try {
+            const data = await this.readFile();
+
+            this.products = JSON.parse(data);
+            const index = this.products.findIndex((product) => product.id === id);
+            this.products.splice(index, 1);
+            await this.writeFile(this.products);
+        } catch (err) {
+            throw err
         }
+    };
+
+
+    async readFile() {
+        return new Promise((resolve, reject) => {
+            fs.readFile(this.path, "utf-8", (err, data) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve(data);
+                }
+            });
+        });
+    }
+
+    async writeFile(data) {
+        return new Promise((resolve, reject) => {
+            fs.writeFile(this.path, JSON.stringify(data, null, "\t"), (err) => {
+                if (err) {
+                    reject(err);
+                }
+                resolve();
+            });
+        });
     }
 }
 
-module.exports = ProductManager;
-const productManager = new ProductManager();
-console.log(productManager.getProducts())
- 
+export default ProductManager;
+
