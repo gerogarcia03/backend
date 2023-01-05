@@ -24,7 +24,6 @@ app.get("/products",  async (req, res) => {
         const prods = await productManager.getProducts();
         const limit = req.query.limit;
         let prodLimited;
-
         if (limit) {
             prodLimited = prods.slice(0, limit);
         }
@@ -34,7 +33,7 @@ app.get("/products",  async (req, res) => {
     }
 });
 
-app.post("/productos", async (req, res) => {
+app.post("/products", async (req, res) => {
     try {
       const products = await productManager.getProducts();
       const newProduct = req.body;
@@ -44,6 +43,18 @@ app.post("/productos", async (req, res) => {
       res.status(500).send(err.message);
     }
   })
+
+app.get("/products/:id", async (req, res) => {
+    try{
+        const id = req.params.id;
+        const product = await productManager.getProductsById(id); 
+        console.log(id, product)
+        res.send(product)
+    }catch (err) {
+        res.status(500).send(err.message)
+    }
+})
+
 
 
 app.listen(port, () => {

@@ -1,8 +1,7 @@
 import fs from 'fs';
-import path from 'path';
 
 class ProductManager {
-    constructor(path, products) {
+    constructor(path) {
         this.path = path
     }
 
@@ -14,13 +13,12 @@ class ProductManager {
                 this.products = JSON.parse(data);
             }
 
-            if (product.id = this.products.length) {
-                this.products.reduce((max, product) => (product.id > max ? product.id : max),
+            product.id = this.products.length
+                ? this.products.reduce(
+                    (max, product) => (product.id > max ? product.id : max),
                     0
                 ) + 1
-            } else {
-                1;
-            }
+                : 1;
 
             this.products.push(product);
 
@@ -46,15 +44,14 @@ class ProductManager {
 
 
     async getProductsById(id) {
+        id = Number(id)
         try {
             const data = await this.readFile();
-
             this.products = JSON.parse(data);
-            const index = this.products.findIndex((product) => product.id === id);
-            this.products.splice(index, 1);
-            await this.writeFile(this.products);
+            const products = this.products.findLast((producto) => producto.id === id);
+            return products;
         } catch (err) {
-            throw err
+            console.log("hubo un error intentando buscar el ID")
         }
     }
 
@@ -64,7 +61,7 @@ class ProductManager {
             const data = await this.readFile();
 
             this.products = JSON.parse(data);
-            const index = this.products.findIndex((product) => product.id === id);
+            const index = this.products.find((product) => product.id === id);
             this.products[index] = product;
             await this.writeFile(this.products);
         } catch (err) {
