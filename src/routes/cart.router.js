@@ -1,12 +1,13 @@
 import express from "express";
-import { ProductManager } from "../classes/productManager.js";
+import { ProductManager } from "../classes/FileManager.js";
 import { v4 } from "uuid";
 import path from "path";
-import { CartFileManager } from "../classes/productManager.js";
+import { CartFileManager } from "../classes/FileManager.js";
 
 const cartRouter = express.Router();
+
 const cartFileManager = new CartFileManager(
-    path.resolve(process.cwd(), "public", "carts.json")
+    path.resolve(process.cwd(), "public", "cart.json")
 );
 
 const FileManager = new ProductManager(

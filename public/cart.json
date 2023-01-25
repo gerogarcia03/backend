@@ -1,0 +1,18 @@
+[
+    {
+        "id": 0,
+        "stock": "1",
+        "price": 70,
+        "title": "Coca-Cola 500",
+        "thumbnail": "../Assets/coca500.jpg",
+        "description": "Botella de coca cola de 500ml"
+    },
+    {
+        "id": 5,
+        "stock": 1,
+        "price": 70,
+        "title": "Sonrisas",
+        "thumbnail": "../Assets/sonrisas.jpg",
+        "description": "galletitas sonrisas"
+    }
+]
