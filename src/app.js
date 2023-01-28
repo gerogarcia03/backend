@@ -2,6 +2,7 @@ import { engine } from "express-handlebars";
 import express from "express";
 import viewsRoute from "./routes/view.router.js";
 import { Server } from "socket.io";
+import productRouter from "./routes/product.router.js";
 
 const app = express();
 const port = process.env.PORT || 8080;
@@ -35,6 +36,7 @@ app.engine("handlebars", engine());
 app.set("view engine", "handlebars");
 app.set("views", "./src/views");
 app.use(express.static("public"));
+app.use("/api/products", productRouter)
 
 app.get("/", (req, res) => {
     let homePage = {
@@ -44,7 +46,7 @@ app.get("/", (req, res) => {
 });
 
 
-app.get("/form", (req, res) => {
+app.get("/api/form", (req, res) => {
   let testUser = {
     title: "Este es un formulario",
     message: "Hola gracias por registrarte!",
@@ -52,7 +54,3 @@ app.get("/form", (req, res) => {
   };
   res.render("form", testUser);
 });
-
-app.get("/prods", (req, res) => {
-    res.render("prods")
-})

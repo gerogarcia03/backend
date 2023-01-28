@@ -3,12 +3,12 @@ import { ProductManager } from "../classes/FileManager.js";
 import { v4 } from "uuid";
 import path from "path";
 
-const prodRouter = express.Router();
+const productRouter = express.Router();
 const productFileManager = new ProductManager(
   path.resolve(process.cwd(), "public", "products.json")
 );
 
-prodRouter.get("/", async (req, res) => {
+productRouter.get("/", async (req, res) => {
   const { limit } = req.query;
 
   try {
@@ -25,13 +25,13 @@ prodRouter.get("/", async (req, res) => {
   }
 });
 
-prodRouter.get("/:pid", async (req, res) => {
+productRouter.get("/:pid", async (req, res) => {
   const { pid } = req.params;
 
   try {
     const products = await productFileManager.getAll();
 
-    const product = products.find((product) => product.id === pid);
+    const product = products.find((product) => product.id === parseInt(pid));
     if (!product) {
       res.status(404).send("Producto no encontrado");
       return;
@@ -43,7 +43,7 @@ prodRouter.get("/:pid", async (req, res) => {
   }
 });
 
-prodRouter.post("/", async (req, res) => {
+productRouter.post("/", async (req, res) => {
   const newProduct = {
     id: v4(),
     ...req.body,
@@ -58,13 +58,13 @@ prodRouter.post("/", async (req, res) => {
   }
 });
 
-prodRouter.put("/:pid", async (req, res) => {
+productRouter.put("/:pid", async (req, res) => {
   const { pid } = req.params;
   const newProduct = req.body;
 
   try {
     const products = await productFileManager.getAll();
-    const productIndex = products.findIndex((product) => product.pid === pid);
+    const productIndex = products.findIndex((product) => product.pid === parseInt(pid));
     if (productIndex === -1) {
       res.status(404).send("Producto no encontrado");
       return;
@@ -78,12 +78,12 @@ prodRouter.put("/:pid", async (req, res) => {
   }
 });
 
-prodRouter.delete("/:pid", async (req, res) => {
+productRouter.delete("/:pid", async (req, res) => {
   const { pid } = req.params;
 
   try {
     const products = await productFileManager.getAll();
-    const productIndex = products.findIndex((product) => product.pid === pid);
+    const productIndex = products.findIndex((product) => product.pid === parseInt(pid));
     if (productIndex === -1) {
       res.status(404).send("Producto no encontrado");
       return;
@@ -97,4 +97,4 @@ prodRouter.delete("/:pid", async (req, res) => {
   }
 });
 
-export default prodRouter;
+export default productRouter;
