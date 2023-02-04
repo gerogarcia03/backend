@@ -54,7 +54,7 @@ cartRouter.get("/:cid", async (req, res) => {
     }
 });
 
-cartRouter.post("/:cid/product/:pid", async (req, res) => {
+cartRouter.post("/api/carts/:cid/product/:pid", async (req, res) => {
     const { cid, pid } = req.params;
 
     try {
