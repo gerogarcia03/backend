@@ -42,7 +42,7 @@ app.get("/", (req, res) => {
     let homePage = {
         title: "HomePage"
     }
-    res.render("home", homePage)
+    res.render("index", homePage)
 });
 
 

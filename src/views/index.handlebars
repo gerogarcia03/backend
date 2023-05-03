@@ -12,9 +12,15 @@
     <div>
         <p>Registrate en nuestro formulario <a href="/api/form">formulario</a></p>
     </div>
-    <div>
-        <h2>Visita nuestros <a href="/api/products">productos</a></h2>
+        <h2>Estos son nuestros productos</h2>
+
+       <div>
+        {{#each products}}
+            <p>Título: {{products.title}}</p>
+            <p>Price: {{products.price}}</p>
+        {{/each}}
+        Hola
     </div>
   </body>
-  <script src="../routes/product.router.js"></script>
+  <script src="../routes/view.router.js"></script>
 </html>
